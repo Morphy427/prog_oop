@@ -42,3 +42,11 @@ def reverse_dict(dictionnary:dict[str:list[str]]):
 
     return(new_dict)
 
+def dict_for_ascendant(path_to_BP_hierarchy:str):
+    """Fonction qui lit geneOntology-BP-hierarchy-indirect.tsv pour le convertir en dictionnaire descendant:ascendant"""
+    future_dict = dict()
+    with open(path_to_BP_hierarchy,"r") as f:
+        temp_list = [line.strip().split("\t") for line in f]
+        for asc,desc in temp_list:
+            future_dict.update({asc:desc})
+    return future_dict
