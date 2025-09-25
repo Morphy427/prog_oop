@@ -1,7 +1,9 @@
 from goatools.associations import read_gaf
+from goatools.obo_parser import GODag
 
 # ----- Lecture .gaf contenant toutes les annotations des protéines humaines, nécessite goa_human.gaf dans le répertoire de travail ------- #
 human_annot = read_gaf("goa_human.gaf") 
+obodag = GODag("go-basic.obo") # Voir pour gérer term.is_obsolete 
 
 # Lecture CSV + extraction ensemble protéique
 def proteins_list_from_csv(nom_fichier:str):
@@ -39,3 +41,4 @@ def reverse_dict(dictionnary:dict[str:list[str]]):
                 new_dict.update({go:[uniprot_id]})
 
     return(new_dict)
+
