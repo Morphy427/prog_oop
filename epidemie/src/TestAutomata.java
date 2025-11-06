@@ -2,8 +2,8 @@ public class TestAutomata {
 
     public static void main(String[] args){
         Automata working_matrix = new Automata(15, 0.7, 0.5);
-        Automata unworking_matrix_1 = new Automata(10, 2,0);
-        Automata unworking_matrix_2 = new Automata(10, 0.5,2);
+        //Automata unworking_matrix_1 = new Automata(10, 2,0);
+        //Automata unworking_matrix_2 = new Automata(10, 0.5,2);
         working_matrix.contaminateForSure();
         working_matrix.matrixDisplay();
 

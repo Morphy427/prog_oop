@@ -158,7 +158,7 @@ public class Automata {
         return false;
     }
 
-     /**
+    /**
      * Calcul l'état suivant sur les cases adjacentes
      * @param i coordonnée en ligne.
      * @param j coordonnée en colonne.
@@ -189,7 +189,7 @@ public class Automata {
     }
 
 
-       /**
+    /**
      * Calcul l'état suivant sur les cases autours
      * @param i coordonnée en ligne.
      * @param j coordonnée en colonne.
@@ -205,7 +205,7 @@ public class Automata {
         return this.matrix[i][j];
     }
 
-      /**
+    /**
      * Calcul l'état suivant sur les cases autours, risque de décès fixé a 0.1
      * @param i coordonnée en ligne.
      * @param j coordonnée en colonne.
@@ -221,9 +221,9 @@ public class Automata {
     }
 
     /**
-    * Simule la propagation de l'épidémie. 
-    * Propage l'épidémie avec une probabilité par défaut de 0,5
-    */
+     * Simule la propagation de l'épidémie. 
+     * Propage l'épidémie avec une probabilité par défaut de 0,5
+     */
     private void spreadDisease(){
         if (this.isSick()){
             int size = this.dimension;
@@ -238,9 +238,9 @@ public class Automata {
     }
 
     /**
-    * Simule la propagation de l'épidémie sur les cases adjacentes. Propage l'épidémie avec une probabilité défini par l'utilisateur
-    * @param m Pourcentage de risque de décès
-    */
+     * Simule la propagation de l'épidémie sur les cases adjacentes. Propage l'épidémie avec une probabilité défini par l'utilisateur
+     * @param m Pourcentage de risque de décès
+     */
     private void spreadDisease(double m){
         if (this.isSick()){
             int size = this.dimension;
@@ -255,8 +255,8 @@ public class Automata {
     }
 
     /**
-    * Simule la propagation de l'épidémie sur les cases autours. Propage l'épidémie avec une probabilité fixée a 0.5 
-    */
+     * Simule la propagation de l'épidémie sur les cases autours. Propage l'épidémie avec une probabilité fixée a 0.5 
+     */
     private void spreadDisease2(){
         if (this.isSick()){
             int size = this.dimension;
@@ -271,9 +271,9 @@ public class Automata {
     }
 
     /**
-    * Simule la propagation de l'épidémie sur les cases autours. Propage l'épidémie avec une probabilité défini par l'utilisateur
-    * @param m Pourcentage de risque de décès
-    */
+     * Simule la propagation de l'épidémie sur les cases autours. Propage l'épidémie avec une probabilité défini par l'utilisateur
+     * @param m Pourcentage de risque de décès
+     */
     private void spreadDisease2(double m){
         if (this.isSick()){
             int size = this.dimension;
