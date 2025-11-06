@@ -33,11 +33,11 @@ public class Automata {
             throw new IllegalArgumentException("n doit être au moins 10");
         }
 
-        if (0 >= d || d >= 1){
+        if (0 > d || d > 1){
             throw new IllegalArgumentException("d doit être compris entre 0 et 1");
         }
 
-        if (0 >= p || p >= 1){
+        if (0 > p || p > 1){
             throw new IllegalArgumentException("p doit être compris entre 0 et 1");
         }
 
@@ -46,9 +46,9 @@ public class Automata {
 
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                matrix[i][j] = Math.random() < d ? 1 : 0; // Génère un nombre aléatoire entre 0 et 1, si inférieur à d, peuple la case
-                if (matrix[i][j] == 1){ // si la case est peuplée
-                    matrix[i][j] = Math.random() < p ? 2 : 1; // Chance d'être vacciné
+                this.matrix[i][j] = Math.random() < d ? 1 : 0; // Génère un nombre aléatoire entre 0 et 1, si inférieur à d, peuple la case
+                if (this.matrix[i][j] == 1){ // si la case est peuplée
+                    this.matrix[i][j] = Math.random() < p ? 2 : 1; // Chance d'être vacciné
                 }
             }
         }
@@ -70,9 +70,9 @@ public class Automata {
         this.matrix = new int [10][10];
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
-                matrix[i][j] = Math.random() < d ? 1 : 0;
-                if (matrix[i][j] == 1){
-                    matrix[i][j] = Math.random() < 0.86 ? 2 : 1;
+                this.matrix[i][j] = Math.random() < d ? 1 : 0;
+                if (this.matrix[i][j] == 1){
+                    this.matrix[i][j] = Math.random() < 0.86 ? 2 : 1;
                 }
             }
         }
@@ -113,7 +113,7 @@ public class Automata {
         return false;
     }
 
-    // idem avec diagonales
+    // Check voisinnage malades avec diagonales
     private boolean hasNeighborSick2(int i, int j){
         if(i-1 >= 0){
             if(this.matrix[i-1][j] == 5){
@@ -162,7 +162,7 @@ public class Automata {
      * Calcul l'état suivant sur les cases adjacentes
      * @param i coordonnée en ligne.
      * @param j coordonnée en colonne.
-     * @param m Risque d'être contaminé. Un double entre 0.0 et 1.0. 
+     * @param m Risque de décès. Un double entre 0.0 et 1.0. 
      */
     private int nextState(int i, int j, double m){
         if (isSick(i, j)){
@@ -174,7 +174,7 @@ public class Automata {
         return this.matrix[i][j];
     }
     /**
-     * Calcul l'état suivant sur les cases adjacentes, risque d'être contaminé fixé a 0.1
+     * Calcul l'état suivant sur les cases adjacentes, risque de décès fixé a 0.1
      * @param i coordonnée en ligne.
      * @param j coordonnée en colonne.
      */
@@ -193,7 +193,7 @@ public class Automata {
      * Calcul l'état suivant sur les cases autours
      * @param i coordonnée en ligne.
      * @param j coordonnée en colonne.
-     * @param m Risque d'être contaminé. Un double entre 0.0 et 1.0. 
+     * @param m Risque de décès. Un double entre 0.0 et 1.0. 
      */
     private int nextState2(int i, int j, double m){
         if (isSick(i, j)){
@@ -206,7 +206,7 @@ public class Automata {
     }
 
       /**
-     * Calcul l'état suivant sur les cases autours, risque de contamination fixé a 0.1
+     * Calcul l'état suivant sur les cases autours, risque de décès fixé a 0.1
      * @param i coordonnée en ligne.
      * @param j coordonnée en colonne.
      */
@@ -224,8 +224,9 @@ public class Automata {
     * Simule la propagation de l'épidémie. 
     * Propage l'épidémie avec une probabilité par défaut de 0,5
     */
-    private void popagateDisease(){
-        int size = this.dimension;
+    private void spreadDisease(){
+        if (this.isSick()){
+            int size = this.dimension;
         int[][] newMatrix = new int [size][size];
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
@@ -233,59 +234,66 @@ public class Automata {
             }
         }
         this.matrix = newMatrix;
+        }
     }
 
     /**
     * Simule la propagation de l'épidémie sur les cases adjacentes. Propage l'épidémie avec une probabilité défini par l'utilisateur
-    * @param m Pourcentage de risque de contamination
+    * @param m Pourcentage de risque de décès
     */
-    private void popagateDisease(double m){
-        int size = this.dimension;
-        int[][] newMatrix = new int [size][size];
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                newMatrix[i][j] = this.nextState(i, j, m);
+    private void spreadDisease(double m){
+        if (this.isSick()){
+            int size = this.dimension;
+            int[][] newMatrix = new int [size][size];
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < size; j++) {
+                    newMatrix[i][j] = this.nextState(i, j, m);
+                }
             }
+            this.matrix = newMatrix;
         }
-        this.matrix = newMatrix;
     }
 
     /**
     * Simule la propagation de l'épidémie sur les cases autours. Propage l'épidémie avec une probabilité fixée a 0.5 
     */
-    private void propagateDisease2(){
-        int size = this.dimension;
-        int[][] newMatrix = new int [size][size];
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                newMatrix[i][j] = this.nextState2(i, j, 0.5);
+    private void spreadDisease2(){
+        if (this.isSick()){
+            int size = this.dimension;
+            int[][] newMatrix = new int [size][size];
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < size; j++) {
+                    newMatrix[i][j] = this.nextState2(i, j, 0.5);
+                }
             }
+            this.matrix = newMatrix;
         }
-        this.matrix = newMatrix;
     }
 
     /**
     * Simule la propagation de l'épidémie sur les cases autours. Propage l'épidémie avec une probabilité défini par l'utilisateur
-    * @param m Pourcentage de risque de contamination
+    * @param m Pourcentage de risque de décès
     */
-    private void propagateDisease2(double m){
-        int size = this.dimension;
-        int[][] newMatrix = new int [size][size];
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                newMatrix[i][j] = this.nextState2(i, j, m);
+    private void spreadDisease2(double m){
+        if (this.isSick()){
+            int size = this.dimension;
+            int[][] newMatrix = new int [size][size];
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < size; j++) {
+                    newMatrix[i][j] = this.nextState2(i, j, m);
+                }
             }
+            this.matrix = newMatrix;
         }
-        this.matrix = newMatrix;
     }
 
     /**
-     * Simule la propagation de la matrice
-     * @param n Nombrre d'itération
+     * Simule la propagation de la matrice sur n itération
+     * @param n Nombre d'itération
      */
     public void propagateDisease(int n){
         for (int i = 0 ; i < n ; i++){
-            this.popagateDisease();
+            this.spreadDisease();
             this.matrixDisplay();
             try {
                 Thread.sleep(5000) ;
@@ -296,14 +304,14 @@ public class Automata {
     }
     
     /**
-     * Simule la propagation de la matrice avec un risque de contamination défini par l'utilisateur
+     * Simule la propagation de la matrice avec un risque de décès défini par l'utilisateur
      * Cases adjacentes
-     * @param n Nombrre d'itération
-     * @param m Pourcentage de risque d'être contaminé
+     * @param n Nombre d'itération
+     * @param m Pourcentage de risque d'être décès
      */
     public void propagateDisease(int n, double m){
         for (int i = 0 ; i < n ; i++){
-            this.popagateDisease(m);
+            this.spreadDisease(m);
             this.matrixDisplay();
             try {
                 Thread.sleep(5000) ;
@@ -313,44 +321,28 @@ public class Automata {
         }
     }
     /**
-     * Simule la propagation de la matrice avec un risque de contamination fixé jusqu'à ce qu'il n'y ait plus de malade
+     * Simule la propagation de la matrice avec un risque de décès fixé jusqu'à ce qu'il n'y ait plus de malade
      * Cases adjacentes
      */
-    public void propagateDisease(){
+    public void propagateDiseaseUntilEnd(){
         while(this.isSick()){
-            this.popagateDisease();
+            this.spreadDisease();
             this.matrixDisplay();
             try {
-                Thread.sleep(5) ;
+                Thread.sleep(5000) ;
             } catch ( InterruptedException ex ) {
                 Thread.currentThread().interrupt();
             }
         }
     }
     /**
-     * Simule la propagation de la matrice avec un risque de contamination défini par l'utilisateur jusqu'à ce qu'il n'y ait plus de malade
+     * Simule la propagation de la matrice avec un risque de décès défini par l'utilisateur jusqu'à ce qu'il n'y ait plus de malade
      * Cases adjacentes
+     * @param m Risque de décès
      */
-    public void propagateDisease(double m){
+    public void propagateDiseaseUntilEnd(double m){
         while(this.isSick()){
-            this.popagateDisease(m);
-            this.matrixDisplay();
-            try {
-                Thread.sleep(5) ;
-            } catch ( InterruptedException ex ) {
-                Thread.currentThread().interrupt();
-            }
-        }
-    }
-
-    /**
-     * Simule la propagation de la matrice avec un risque de contamination fixé
-     * Cases autours
-     * @param n Nombre d'itération
-     */
-    public void propagateDisease2_2(int n){
-        for (int i = 0 ; i < n ; i++){
-            this.propagateDisease2();
+            this.spreadDisease(m);
             this.matrixDisplay();
             try {
                 Thread.sleep(5000) ;
@@ -361,14 +353,31 @@ public class Automata {
     }
 
     /**
-     * Simule la propagation de la matrice avec un risque de contamination fixé par l'utilisateur
+     * Simule la propagation de la matrice avec un risque de décès fixé
      * Cases autours
      * @param n Nombre d'itération
-     * @param m Pourcentage de risque d'être contaminé
      */
-    public void propagateDisease2_2(int n, double m){
+    public void propagateDisease2(int n){
         for (int i = 0 ; i < n ; i++){
-            this.propagateDisease2(m);
+            this.spreadDisease2();
+            this.matrixDisplay();
+            try {
+                Thread.sleep(5000) ;
+            } catch ( InterruptedException ex ) {
+                Thread.currentThread().interrupt();
+            }
+        }
+    }
+
+    /**
+     * Simule la propagation de la matrice avec un risque de décès fixé par l'utilisateur
+     * Cases autours
+     * @param n Nombre d'itération
+     * @param m Pourcentage de risque d'être décès
+     */
+    public void propagateDisease2(int n, double m){
+        for (int i = 0 ; i < n ; i++){
+            this.spreadDisease2(m);
             this.matrixDisplay();
             try {
                 Thread.sleep(5000) ;
@@ -380,12 +389,12 @@ public class Automata {
 
     
     /**
-     * Simule la propagation de la matrice avec un risque de contamination fixé jusqu'à ce qu'il n'y ait plus de malade
+     * Simule la propagation de la matrice avec un risque de décès fixé jusqu'à ce qu'il n'y ait plus de malade
      * Cases autours
      */
-    public void propagateDisease2_2(){
+    public void propagateDisease2UntilEnd(){
         while(this.isSick()){
-            this.propagateDisease2();
+            this.spreadDisease2();
             this.matrixDisplay();
             try {
                 Thread.sleep(5000) ;
@@ -397,13 +406,13 @@ public class Automata {
     }
 
     /**
-     * Simule la propagation de la matrice avec un risque de contamination défini par l'utilisateur jusqu'à ce qu'il n'y ait plus de malade
+     * Simule la propagation de la matrice avec un risque de décès défini par l'utilisateur jusqu'à ce qu'il n'y ait plus de malade
      * Cases autours
-     * @param m Pourcentage de risque d'être contaminé
+     * @param m Pourcentage de risque d'être décès
      */
-    public void propagateDisease2_2(double m){
+    public void propagateDisease2UntilEnd(double m){
         while(this.isSick()){
-            this.propagateDisease2(m);
+            this.spreadDisease2(m);
             this.matrixDisplay();
             try {
                 Thread.sleep(5000) ;
@@ -450,21 +459,7 @@ public class Automata {
         }
         System.out.println(toString); 
     }
-    /**
-     * Vérifie si une personne est toujours présente sur la matrice
-     */
-    public boolean isAnnihilated(){ 
-        boolean anihilated = true;
-        for (int i = 0; i < this.dimension; i++) {
-            for (int j = 0; j < this.dimension; j++) {
-                if (this.matrix[i][j] == 1 || this.matrix[i][j] == 5){
-                    anihilated = false;
-                    break;
-                }
-            }
-        }
-        return anihilated;
-    }
+   
     
     /**
      * Vérifie si une personne est malade sur la matrice
@@ -484,19 +479,13 @@ public class Automata {
 
     // Contamine une case précise
     public void contaminate(int i, int j){
-        this.matrix[i][j] = 5;
-    }
-
-    // Contamine une case aléatoire
-    public void contaminate(){
-        Random randomNumber = new Random();
-        int i = randomNumber.nextInt(this.dimension);
-        int j = randomNumber.nextInt(this.dimension);
-        this.matrix[i][j] = 5;
+        if (this.isPeople(i,j)) {
+            this.matrix[i][j] = 5;
+        }
     }
 
     // Contamine une case aléatoire obligatoirement
-    public void contaminateForrSure(){
+    public void contaminateForSure(){
         Random randomNumber = new Random();
         int i = randomNumber.nextInt(this.dimension);
         int j = randomNumber.nextInt(this.dimension);
@@ -507,9 +496,6 @@ public class Automata {
         this.matrix[i][j] = 5;
     }
 
-    public static void main(String[] args) {
-        Automata test = new Automata(0.5);
-        test.matrixDisplay();
-        System.out.println(test.isAnnihilated());
-    }
+    // pistes d'amélioréétions : définir un attribut m et d pour contrôler leur valeur dès le début
+    // rajouter un display qui prend en compte le nombre d'itération plutôt que des prints dans le terminal
 }
