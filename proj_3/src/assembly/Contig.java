@@ -111,7 +111,7 @@ public class Contig implements Sequence{
 		String filenameWerror = "/proj_3/src/assembly/my_reads_with_sequencing_errors.txt" ;
 		File monFichierTexteWerror = new File ( System.getProperty ( "user.dir" ) + filenameWerror ) ;
 
-		float perror_test = 0.5f;
+		float perror_test = 0.1f;
 		// Simple test to verify that the file exists.
 		if ( monFichierTexteWerror.exists() ) {
 			System.out.println ( " The file " + filenameWerror + " is present in the given directory \n " ) ;
