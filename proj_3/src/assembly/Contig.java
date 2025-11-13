@@ -228,7 +228,6 @@ public class Contig implements Sequence{
 	}
 
 	public Contig fusion(Read r){
-		// je suis pas trop sur de ce qu'elle entend par fusionner contig et read ?
 		int numToCut = this.bestOverlap(r);
 		String seqToAdd = r.getSeq().substring(numToCut);
 		String newSeq = this.getSeq().concat(seqToAdd);
@@ -238,6 +237,9 @@ public class Contig implements Sequence{
 
 	public Contig fusionWerror(Read r, float perror){
 		int numToCut = this.bestOverlapWithError(r, perror);
+		if (numToCut == 0 ){
+			return this;
+		}
 		String seqToAdd = r.getSeq().substring(numToCut);
 		String newSeq = this.getSeq().concat(seqToAdd);
 		int nb_fus = this.getNb_fusions() + 1;
@@ -321,5 +323,16 @@ public class Contig implements Sequence{
 			return bestScorePos;
 		}
 	}
+
+	public String greddyAlgo(LinkedList<Read> l){
+        int index = nextRead(l);
+        while (index != -1 && !l.isEmpty()){
+            fusion(l.get(index));
+            l.remove(index);
+            System.out.println("Fusion with " + index +", still " + l.size() + " reads to assemble... WIP");
+            index = nextRead(l);
+        }
+        return getSeq();
+    }
 	
 }
