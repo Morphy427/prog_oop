@@ -11,26 +11,38 @@ public class Contig implements Sequence{
 	private int len ;
 	private String contig ;
 	private int nb_fusions ;
-	
 
+	/**
+	 * Default constructor
+	 */
 	public Contig() {
 		contig = "azertyuiopqsdfghjklmwxcvbnazertyuiopdfghjklmqsdfghjklmllllkjhgfdsqsdfgaaaaaaaaaaacccccccccccccccccccccctttttttttttttttttttddddddddddddddddddhjklm"; 
 		len = contig.length();
 		nb_fusions = 0;
 	}
-
+	/**
+	 * Constructor
+	 * @param s String representing the contig sequence
+	 */
 	public Contig(String s) {
 		contig = s; 
 		len = contig.length();
 		nb_fusions = 0;
 	}
-
+	/**
+	 * Constructor
+	 * @param s String representing the contig sequence
+	 * @param nb_fus int representing the number of fusions done to obtain this contig
+	 */
 	public Contig(String s, int nb_fus) {
 		contig = s; 
 		len = contig.length();
 		nb_fusions = nb_fus;
 	}
-	
+	/**
+	 * Constructor
+	 * @param r Read used to create the contig
+	 */
 	public Contig(Read r) {
 		contig = r.getSeq(); 
 		len = contig.length();
@@ -179,11 +191,15 @@ public class Contig implements Sequence{
 	public void setNb_fusions(int nb_fusions) {
 		this.nb_fusions = nb_fusions;
 	}
-	
+	/**
+	 * Formats the contig sequence in FASTA format (60 characters per line)
+	 * @return String representing the contig in FASTA format
+	 */
 	public String fastaFormat(){
-		String seq = this.getSeq();
+		String seq = this.getSeq(); 
 		String seqFasta = "";
-		for (int i = 0 ; i < this.getLength() ; i++){
+		// for each character in the sequence, add a line break every 60 characters
+		for (int i = 0 ; i < this.getLength() ; i++){ 
 			if (i%60 == 0){
 				seqFasta += "\n";
 			}
@@ -192,27 +208,38 @@ public class Contig implements Sequence{
 		return seqFasta;
 	}
 
+	/**
+	 * Finds the best overlap between the contig and a read
+	 * @param r Read to compare with the contig
+	 * @return int representing the length of the best overlap
+	 */
 	public int bestOverlap(Read r){
 		int maxCount = 0;
 		String seqRead = r.getSeq();
 		String seqContig = this.getSeq();
-
+		// iterate through the contig sequence to find the best overlap with the current read
 		for(int i = 0 ; i < this.getLength() ; i++){
-			if (seqContig.charAt(i) == seqRead.charAt(0)){
+			if (seqContig.charAt(i) == seqRead.charAt(0)){  // if the first character of the read matches the current character of the contig
 				int count = 0;
+				// count the number of matching characters
 				while (seqContig.charAt(i + count) == seqRead.charAt(count) && i+count < this.getLength()-1 && count < r.getLength()){
 					count ++;
 				}
-				maxCount = Math.max(maxCount, count+1);
+				maxCount = Math.max(maxCount, count+1); // update the maximum overlap length found
 			}
 		}
 		return maxCount;
 	}
-
+	/**
+	 * Finds the next read in a list that has the best overlap with the contig
+	 * @param l LinkedList of reads to search through
+	 * @return int representing the position of the read with the best overlap, or -1 if no suitable read is found
+	 */
 	public int nextRead(LinkedList<Read> l){
 		int pos = 0;
 		int bestScore = 0;
 		int bestScorePos = 0;
+		// iterate through the list of reads to find the one with the best overlap
 		for(Read read : l){
 			if (bestOverlap(read) > bestScore){
 				bestScore = bestOverlap(read);
@@ -220,65 +247,49 @@ public class Contig implements Sequence{
 			}
 			pos++;
 		}
-		if (bestScore < 8){
+		if (bestScore < 8){ // if the best overlap is less than 8, return -1
 			return -1;
 		}else{
 			return bestScorePos;
 		}
 	}
 
+	/**
+	 * Fuses the contig with a read based on the best overlap
+	 * @param r Read to fuse with the contig
+	 * @return new Contig resulting from the fusion
+	 */
 	public Contig fusion(Read r){
-		int numToCut = this.bestOverlap(r);
-		String seqToAdd = r.getSeq().substring(numToCut);
-		String newSeq = this.getSeq().concat(seqToAdd);
+		int numToCut = this.bestOverlap(r); // get the length of the best overlap
+		String seqToAdd = r.getSeq().substring(numToCut); // get the part of the read that is not overlapping
+		String newSeq = this.getSeq().concat(seqToAdd); // concatenate the contig sequence with the non-overlapping part of the read
 		int nb_fus = this.getNb_fusions() + 1;
 		return new Contig(newSeq, nb_fus);
 	}
 
+	/**
+	 * Fuses the contig with a read based on the best overlap, allowing for sequencing errors
+	 * @param r Read to fuse with the contig
+	 * @param perror float representing the allowed error rate
+	 * @return new Contig resulting from the fusion
+	 */
 	public Contig fusionWerror(Read r, float perror){
-		int numToCut = this.bestOverlapWithError(r, perror);
-		if (numToCut == 0 ){
+		int numToCut = this.bestOverlapWithError(r, perror); // get the length of the best overlap
+		if (numToCut == 0 ){ // no overlap found
 			return this;
 		}
-		String seqToAdd = r.getSeq().substring(numToCut);
-		String newSeq = this.getSeq().concat(seqToAdd);
+		String seqToAdd = r.getSeq().substring(numToCut); // get the part of the read that is not overlapping
+		String newSeq = this.getSeq().concat(seqToAdd); // concatenate the contig sequence with the non-overlapping part of the read
 		int nb_fus = this.getNb_fusions() + 1;
 		return new Contig(newSeq, nb_fus);
 	}
 
-
-	// public int bestOverlapWithError(Read r, float perror){
-	// 	String seqRead = r.getSeq();
-	// 	String seqContig = this.getSeq();
-
-	// 	for(int i = r.getLength()-1 ; i >= 0 ; i--){
-	// 		String subcontig = seqContig.substring(this.getLength()-i);
-	// 		String subread = seqRead.substring(0, i);
-	// 		if (r.nearlyEquals(subcontig, subread, perror)){
-	// 			return i-1;
-	// 		}
-	// 	}
-	// 	return -1;
-	// }
-
-	// public int bestOverlapWithError(Read r,float perror){
-    //     String seqRead = r.getSeq();
-    //     String seqContig = this.getSeq();
-    //     int contigLen = seqContig.length(); 
-    //     int readLen = seqRead.length();
-
-    //     for(int i = 0 ; i < readLen ; i++){
-	// 		String subcontig = seqContig.substring((contigLen - readLen) + i);
-	// 		// System.out.println("subcontig : " + subcontig);
-	// 		String subread = seqRead.substring(i);
-	// 		// System.out.println("subread   : " + subread);
-	// 		if (Read.nearlyEquals(subcontig, subread, perror)){
-	// 			// System.out.println("nearly equals : " + subread.length() );
-	// 			return subread.length()-1;
-	// 		}
-    //     }
-    //     return 0;
-    // }
+	/**
+	 * Finds the best overlap between the contig and a read, allowing for sequencing errors
+	 * @param r Read to compare with the contig
+	 * @param perror float representing the allowed error rate
+	 * @return int representing the length of the best overlap
+	 */
 
 	public int bestOverlapWithError(Read r, float perror) {
 		String seqRead = r.getSeq();
@@ -287,18 +298,26 @@ public class Contig implements Sequence{
 		int readLen = seqRead.length();
 		int maxOverlap = Math.min(contigLen, readLen);
 
+		// Iterate from the maximum possible overlap length down to 1
 		for (int i = maxOverlap; i > 0; i--) {
-			String subContig = seqContig.substring(contigLen - i);
-			String subRead = seqRead.substring(0, i);
+			String subContig = seqContig.substring(contigLen - i); // Suffix of the contig
+			String subRead = seqRead.substring(0, i); // Prefix of the read
+
+			// Check if the suffix of the contig nearly equals the prefix of the read within the allowed error rate
 			if (Read.nearlyEquals(subContig, subRead, perror)) {
-				return i; // longueur du chevauchement
+				return i; // Return the length of the best overlap found
 			}
 		}
-		return 0;
+		return 0; // No suitable overlap found
 }
 
 
-
+	/**
+	 * Finds the next read in a list that has the best overlap with the contig, allowing for sequencing errors
+	 * @param l LinkedList of reads to search through
+	 * @param perror float representing the allowed error rate
+	 * @return int representing the position of the read with the best overlap, or -1 if no suitable read is found
+	 */
 	public int nextReadWithError(LinkedList<Read> l, float perror){
 		int pos = 0;
 		int bestScore = 0;
@@ -324,15 +343,4 @@ public class Contig implements Sequence{
 		}
 	}
 
-	public String greddyAlgo(LinkedList<Read> l){
-        int index = nextRead(l);
-        while (index != -1 && !l.isEmpty()){
-            fusion(l.get(index));
-            l.remove(index);
-            System.out.println("Fusion with " + index +", still " + l.size() + " reads to assemble... WIP");
-            index = nextRead(l);
-        }
-        return getSeq();
-    }
-	
 }
