@@ -57,7 +57,7 @@ public class Automata {
 
     /**
      * Constructeur de l'Automata.
-     * Initialise une matrice de taille 10 x 10 avec une population et une vaccination basée sur le taux de vaccination au Pakistan en 2023.
+     * Initialise une matrice de taille 10 x 10 avec un taux de vaccination basée sur le taux de vaccination au Pakistan en 2023.
      * @param d La densité de population initiale. Un double entre 0.0 et 1.0. 
      * **C'est la probabilité qu'une case soit peuplée (valeur 0 ou 1).**
      * 86 % de vaccination
