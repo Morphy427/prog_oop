@@ -78,6 +78,30 @@ public class Automata {
         }
     }
 
+    /**
+     * Constructeur par defaut de l'Automata.
+     * Initialise une matrice de taille 10 x 10 avec une population et une vaccination basée sur le taux de vaccination au Pakistan en 2023.
+     * 0.274 habitants/m^2
+     * 86 % de vaccination
+     */
+    public Automata (){
+        int n = 10;
+        double d = 0.86;
+        double p = 0.274;
+        // this(n, d, p);
+        
+        this.dimension = n;
+        this.matrix = new int [n][n];
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                this.matrix[i][j] = Math.random() < d ? 1 : 0;
+                if (this.matrix[i][j] == 1){
+                    this.matrix[i][j] = Math.random() < p ? 2 : 1;
+                }
+            }
+        }
+    }
+
     // Dit si une case contient une personne saine non vaccinée
     private boolean isPeople(int i, int j){
         return this.matrix[i][j] == 1;
