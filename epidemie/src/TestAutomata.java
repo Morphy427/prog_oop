@@ -19,19 +19,19 @@ public class TestAutomata {
         Automata working_matrix_3 = new Automata(10, 0.7, 0.2, 0.1, 1);
         working_matrix_3.contaminateForSure();
         working_matrix_3.matrixDisplay();
-        working_matrix_3.propagateDisease2UntilEnd();
+        working_matrix_3.propagateDiseaseUntilEnd2();
 
         System.out.println("Matrix 4");
         Automata working_matrix_4 = new Automata(10, 0.7, 0.2, 0.9, 1);
         working_matrix_4.contaminateForSure();
         working_matrix_4.matrixDisplay();
-        working_matrix_4.propagateDisease2UntilEnd();
+        working_matrix_4.propagateDiseaseUntilEnd2();
 
         System.out.println("Matrix 5");
         Automata working_matrix_5 = new Automata(10, 0.7, 0.2, 0.1, 0.3);
         working_matrix_5.contaminateForSure();
         working_matrix_5.matrixDisplay();
-        working_matrix_5.propagateDisease2UntilEnd();
+        working_matrix_5.propagateDiseaseUntilEnd2();
 
         System.out.println("Matrix Empty");
         Automata empty_matrix = new Automata(10, 0, 0, 0.1, 1);
