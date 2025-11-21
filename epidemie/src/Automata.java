@@ -223,21 +223,6 @@ public class Automata {
         }
         return this.matrix[i][j];
     }
-    // /**
-    //  * Calcul l'état suivant sur les cases adjacentes, risque de décès fixé a 0.1
-    //  * @param i coordonnée en ligne.
-    //  * @param j coordonnée en colonne.
-    //  */
-    // private int nextState(int i, int j){
-    //     if (isSick(i, j)){
-    //         return (Math.random() < 0.1 ? -1 : 3); 
-    //     }
-    //     if (isPeople(i, j) && hasNeighborSick(i, j)){
-    //         return 5;
-    //     }
-    //     return this.matrix[i][j];
-    // }
-
 
     /**
      * Calcul l'état suivant sur les cases autours
@@ -254,21 +239,6 @@ public class Automata {
         }
         return this.matrix[i][j];
     }
-
-    // /**
-    //  * Calcul l'état suivant sur les cases autours, risque de décès fixé a 0.1
-    //  * @param i coordonnée en ligne.
-    //  * @param j coordonnée en colonne.
-    //  */
-    // private int nextState2(int i, int j){
-    //     if (isSick(i, j)){
-    //         return (Math.random() < 0.1 ? -1 : 3);
-    //     }
-    //     if (isPeople(i, j) && hasNeighborSick2(i, j)){
-    //         return 5;
-    //     }
-    //     return this.matrix[i][j];
-    // }
 
     /**
      * Simule la propagation de l'épidémie. 
@@ -287,23 +257,6 @@ public class Automata {
         }
     }
 
-    // /**
-    //  * Simule la propagation de l'épidémie sur les cases adjacentes. Propage l'épidémie avec une probabilité défini par l'utilisateur
-    //  * @param m Pourcentage de risque de décès
-    //  */
-    // private void spreadDisease(double m){
-    //     if (this.isSick()){
-    //         int size = this.dimension;
-    //         int[][] newMatrix = new int [size][size];
-    //         for (int i = 0; i < size; i++) {
-    //             for (int j = 0; j < size; j++) {
-    //                 newMatrix[i][j] = this.nextState(i, j, m);
-    //             }
-    //         }
-    //         this.matrix = newMatrix;
-    //     }
-    // }
-
     /**
      * Simule la propagation de l'épidémie sur les cases autours. Propage l'épidémie avec une probabilité fixée a 0.5 
      */
@@ -320,23 +273,6 @@ public class Automata {
         }
     }
 
-    // /**
-    //  * Simule la propagation de l'épidémie sur les cases autours. Propage l'épidémie avec une probabilité défini par l'utilisateur
-    //  * @param m Pourcentage de risque de décès
-    //  */
-    // private void spreadDisease2(double m){
-    //     if (this.isSick()){
-    //         int size = this.dimension;
-    //         int[][] newMatrix = new int [size][size];
-    //         for (int i = 0; i < size; i++) {
-    //             for (int j = 0; j < size; j++) {
-    //                 newMatrix[i][j] = this.nextState2(i, j, m);
-    //             }
-    //         }
-    //         this.matrix = newMatrix;
-    //     }
-    // }
-
     /**
      * Simule la propagation de la matrice sur n itération
      * @param n Nombre d'itération
@@ -352,24 +288,6 @@ public class Automata {
             }
         }
     }
-    
-    // /**
-    //  * Simule la propagation de la matrice avec un risque de décès défini par l'utilisateur
-    //  * Cases adjacentes
-    //  * @param n Nombre d'itération
-    //  * @param m Pourcentage de risque d'être décès
-    //  */
-    // public void propagateDisease(int n, double m){
-    //     for (int i = 0 ; i < n ; i++){
-    //         this.spreadDisease(m);
-    //         this.matrixDisplay();
-    //         try {
-    //             Thread.sleep(50) ;
-    //         } catch ( InterruptedException ex ) {
-    //             Thread.currentThread().interrupt();
-    //         }
-    //     }
-    // }
 
     /**
      * Simule la propagation de la matrice avec un risque de décès fixé jusqu'à ce qu'il n'y ait plus de malade
@@ -387,23 +305,6 @@ public class Automata {
         }
     }
 
-    // /**
-    //  * Simule la propagation de la matrice avec un risque de décès défini par l'utilisateur jusqu'à ce qu'il n'y ait plus de malade
-    //  * Cases adjacentes
-    //  * @param m Risque de décès
-    //  */
-    // public void propagateDiseaseUntilEnd(double m){
-    //     while(this.isSick()){
-    //         this.spreadDisease(m);
-    //         this.matrixDisplay();
-    //         try {
-    //             Thread.sleep(50) ;
-    //         } catch ( InterruptedException ex ) {
-    //             Thread.currentThread().interrupt();
-    //         }
-    //     }
-    // }
-
     /**
      * Simule la propagation de la matrice
      * Cases autours
@@ -420,31 +321,12 @@ public class Automata {
             }
         }
     }
-
-    // /**
-    //  * Simule la propagation de la matrice avec un risque de décès fixé par l'utilisateur
-    //  * Cases autours
-    //  * @param n Nombre d'itération
-    //  * @param m Pourcentage de risque d'être décès
-    //  */
-    // public void propagateDisease2(int n, double m){
-    //     for (int i = 0 ; i < n ; i++){
-    //         this.spreadDisease2(m);
-    //         this.matrixDisplay();
-    //         try {
-    //             Thread.sleep(50) ;
-    //         } catch ( InterruptedException ex ) {
-    //             Thread.currentThread().interrupt();
-    //         }
-    //     }
-    // }
-
     
     /**
      * Simule la propagation de la matrice jusqu'à ce qu'il n'y ait plus de malade
      * Cases autours
      */
-    public void propagateDisease2UntilEnd(){
+    public void propagateDiseaseUntilEnd2(){
         while(this.isSick()){
             this.spreadDisease2();
             this.matrixDisplay();
@@ -456,24 +338,6 @@ public class Automata {
         }
         
     }
-
-    // /**
-    //  * Simule la propagation de la matrice avec un risque de décès défini par l'utilisateur jusqu'à ce qu'il n'y ait plus de malade
-    //  * Cases autours
-    //  * @param m Pourcentage de risque d'être décès
-    //  */
-    // public void propagateDisease2UntilEnd(double m){
-    //     while(this.isSick()){
-    //         this.spreadDisease2(m);
-    //         this.matrixDisplay();
-    //         try {
-    //             Thread.sleep(50) ;
-    //         } catch ( InterruptedException ex ) {
-    //             Thread.currentThread().interrupt();
-    //         }
-    //     }
-        
-    // }
 
     /**
     * Affichage de la matrice
@@ -548,6 +412,5 @@ public class Automata {
         this.matrix[i][j] = 5;
     }
 
-    // pistes d'améliorations : définir un attribut m et d pour contrôler leur valeur dès le début
     // rajouter un display qui prend en compte le nombre d'itération plutôt que des prints dans le terminal
 }
