@@ -9,7 +9,21 @@ public class PreyPredator {
     int proiesMax = 3000 ;
     int year = 0 ;
 
-    PreyPredator () {
+    public void PreyPredator(){
+        Random random = new Random();
+
+        int npreys = random.nextInt(2450) + 50;
+        int npred = random.nextInt(700) + 50;
+
+        for (int i = 0 ; i < npreys ; i++){
+            Prey prey = new Prey();
+            proies.add(prey);
+        }
+
+        for (int i = 0 ; i < npred ; i++){
+            Predator predator = new Predator();
+            predateurs.add(predator);
+        }
     }
 
     PreyPredator (int npreys , int npred ) {
@@ -25,6 +39,8 @@ public class PreyPredator {
             predateurs.add(predator);
         }
     }
+
+
 
     public void oneYear() {
         /* birth of animals */
@@ -43,7 +59,7 @@ public class PreyPredator {
             if ( p.isAbleToReproduce() )
                 babyPreys += 0.5 ;
         for ( int i =0; i < babyPreys ; i++) {
-            if (proies.size() == proiesMax) {
+            if (proies.size() == proiesMax) { // Peut être mettre un proies.size() >= proiesMax pour éviter un éventuel saut qui ne devrait normalement pas arriver avec une incrémentation de 0.5 ?
                 break;
             }
             Prey b = new Prey() ;
@@ -91,13 +107,20 @@ public class PreyPredator {
     } 
 
 
-    public static void main ( String[] args ) {
+    public void main ( String[] args ) {
 
         PreyPredator pp = new PreyPredator (2500 ,500) ;
+        List<Integer> history_prey = new LinkedList<Integer>();
+        List<Integer> history_pred = new LinkedList<Integer>();
+        List<Integer> time = new LinkedList<Integer>();
 
         for ( int y = 0; y < 100; y++) {
             System.out.println ( pp ) ;
             pp.oneYear () ;
+            time.add(y);
+            history_prey.add(proies.size());
+            history_pred.add(predateurs.size());
+
         }
     }
 }
