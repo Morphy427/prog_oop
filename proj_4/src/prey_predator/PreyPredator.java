@@ -9,7 +9,7 @@ public class PreyPredator {
     int proiesMax = 3000 ;
     int year = 0 ;
 
-    public void PreyPredator(){
+    public PreyPredator(){
         Random random = new Random();
 
         int npreys = random.nextInt(2450) + 50;
@@ -26,9 +26,8 @@ public class PreyPredator {
         }
     }
 
-    PreyPredator (int npreys , int npred ) {
+    public PreyPredator (int npreys , int npred ) {
         /* completer */
-        
         for (int i = 0 ; i < npreys ; i++){
             Prey prey = new Prey();
             proies.add(prey);
@@ -40,7 +39,22 @@ public class PreyPredator {
         }
     }
 
+    public static void main ( String[] args ) {
 
+        PreyPredator pp = new PreyPredator (2500 ,500) ;
+        List<Integer> history_prey = new LinkedList<Integer>();
+        List<Integer> history_pred = new LinkedList<Integer>();
+        List<Integer> time = new LinkedList<Integer>();
+
+        for ( int y = 0; y < 100; y++) {
+            System.out.println ( pp ) ;
+            pp.oneYear () ;
+            time.add(y);
+            // history_prey.add(proies.size()); // probleme avec ca jsp pk
+            // history_pred.add(predateurs.size()); // probleme avec ca jsp pk
+
+        }
+    }
 
     public void oneYear() {
         /* birth of animals */
@@ -107,22 +121,7 @@ public class PreyPredator {
     } 
 
 
-    public void main ( String[] args ) {
-
-        PreyPredator pp = new PreyPredator (2500 ,500) ;
-        List<Integer> history_prey = new LinkedList<Integer>();
-        List<Integer> history_pred = new LinkedList<Integer>();
-        List<Integer> time = new LinkedList<Integer>();
-
-        for ( int y = 0; y < 100; y++) {
-            System.out.println ( pp ) ;
-            pp.oneYear () ;
-            time.add(y);
-            history_prey.add(proies.size());
-            history_pred.add(predateurs.size());
-
-        }
-    }
+    
 }
 
     
