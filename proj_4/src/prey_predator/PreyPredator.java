@@ -1,5 +1,7 @@
 package prey_predator;
-
+import org.knowm.xchart.QuickChart;
+import org.knowm.xchart.SwingWrapper;
+import org.knowm.xchart.XYChart;
 import java.util.*;
 
 public class PreyPredator {
@@ -25,7 +27,6 @@ public class PreyPredator {
             predateurs.add(predator);
         }
     }
-
     public PreyPredator (int npreys , int npred ) {
         /* completer */
         for (int i = 0 ; i < npreys ; i++){
@@ -38,23 +39,48 @@ public class PreyPredator {
             predateurs.add(predator);
         }
     }
+    public PreyPredator (int npreys , int npred,double avr, double sdr, double avl, double sdl, double ave, double sde, double ada, double sda) {
+        /* completer */
+        for (int i = 0 ; i < npreys ; i++){
+            Prey prey = new Prey(avr, sdr, avl, sdl , ave, sde);
+            proies.add(prey);
+        }
 
-    public static void main ( String[] args ) {
-
-        PreyPredator pp = new PreyPredator (2500 ,500) ;
-        List<Integer> history_prey = new LinkedList<Integer>();
-        List<Integer> history_pred = new LinkedList<Integer>();
-        List<Integer> time = new LinkedList<Integer>();
-
-        for ( int y = 0; y < 100; y++) {
-            System.out.println ( pp ) ;
-            pp.oneYear () ;
-            time.add(y);
-            // history_prey.add(proies.size()); // probleme avec ca jsp pk
-            // history_pred.add(predateurs.size()); // probleme avec ca jsp pk
-
+        for (int i = 0 ; i < npred ; i++){
+            Predator predator = new Predator(avr, sdr, avl, sdl ,ada, sda);
+            predateurs.add(predator);
         }
     }
+
+
+    public void main ( String[] args ) {
+
+        // config 
+        double avr = 0.3; double sdr = avr*0.1;  // Average / sd reproduction rate  0.3 / 0.1
+        double avl = 10; double sdl = avl*0.3; // Average / sd life Expancy 10 / 4
+        double ave = 0.7; double sde = ave*0.15; // Average / sd escape rate 0.7 / 0.1
+        double ada = 0.9; double sda = ada*0.15; //  Average / sd attack rate 0.9 / 0.1
+
+        List<Integer> values = new ArrayList<>(Arrays.asList(250, 500, 750, 1000, 1250, 1500, 1750, 2000));
+        // for (int npreds : values ) {
+            
+            PreyPredator pp = new PreyPredator (500 ,1500, avr, sdr, avl, sdl, ave, sde, ada, sda) ;
+            List<Integer> history_prey = new LinkedList<Integer>();
+            List<Integer> history_pred = new LinkedList<Integer>();
+            List<Integer> time = new LinkedList<Integer>();
+
+            for ( int y = 0; y < 100; y++) {
+                System.out.println ( pp ) ;
+                pp.oneYear () ;
+                time.add(y);
+                history_prey.add(pp.proies.size()); 
+                history_pred.add(pp.predateurs.size()); 
+
+            }
+            System.out.println(time);System.out.println(history_pred);System.out.println(history_prey);
+        }
+    // }
+
 
     public void oneYear() {
         /* birth of animals */
