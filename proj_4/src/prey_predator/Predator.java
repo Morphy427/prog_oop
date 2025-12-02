@@ -51,7 +51,7 @@ public class Predator extends Animal {
     }
     
     public void starvation(){
-        super.setLifeExp(getAge() - 2);
+    super.setLifeExp((int)getLifeExp() - 2); 
     }
 
     public String toString() {
