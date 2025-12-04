@@ -53,7 +53,7 @@ public class PreyPredator {
     }
 
 
-    public void main ( String[] args ) {
+    public static void main ( String[] args ) {
 
         // config 
         double avr = 0.3; double sdr = avr*0.1;  // Average / sd reproduction rate  0.3 / 0.1
@@ -64,7 +64,7 @@ public class PreyPredator {
         List<Integer> values = new ArrayList<>(Arrays.asList(250, 500, 750, 1000, 1250, 1500, 1750, 2000));
         // for (int npreds : values ) {
             
-            PreyPredator pp = new PreyPredator (500 ,1500, avr, sdr, avl, sdl, ave, sde, ada, sda) ;
+            PreyPredator pp = new PreyPredator (5 ,15, avr, sdr, avl, sdl, ave, sde, ada, sda) ;
             List<Integer> history_prey = new LinkedList<Integer>();
             List<Integer> history_pred = new LinkedList<Integer>();
             List<Integer> time = new LinkedList<Integer>();
@@ -79,7 +79,6 @@ public class PreyPredator {
             }
             System.out.println(time);System.out.println(history_pred);System.out.println(history_prey);
         }
-    // }
 
 
     public void oneYear() {
@@ -90,11 +89,12 @@ public class PreyPredator {
                 babyPreds += 0.5 ;
         for ( int i =0; i < babyPreds ; i++) {
             Predator b = new Predator() ;
-            predateurs.add (b) ;
+            predateurs.add(b) ;
         }
 
         /* completer */
         double babyPreys = 0 ;
+        System.out.println("babypreys = " + babyPreys);
         for ( Prey p : proies )
             if ( p.isAbleToReproduce() )
                 babyPreys += 0.5 ;
@@ -109,10 +109,11 @@ public class PreyPredator {
         /* lunch time */
         Random r = new Random() ;
         for ( Predator p : predateurs ) {
-            if ( p.canAttack() && proies.size() > 1) {
+            if ( p.canAttack() && proies.size() > 0) {
                 /* completer */
                 // tirer une proie
-                int indexPrey = r.nextInt(proies.size()-1);
+                int indexPrey = r.nextInt(proies.size());
+                // System.out.println("Predator attacks prey at index: " + indexPrey);
                 Prey attackedPrey = proies.get(indexPrey);
 
                 //verifier si elle s'echappe
@@ -121,11 +122,15 @@ public class PreyPredator {
                     p.starvation();
                 } else {
                     // si non mort de la proie
-                    proies.remove(indexPrey);
+                    proies.remove(indexPrey); 
                 } 
+            } 
+            else 
+            {
+                p.starvation();
             }
-
         }
+
         /* age increment and death of animals */
         /* completer */
         for (int i = 0 ; i < proies.size() ; i++){
